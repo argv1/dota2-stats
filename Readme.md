@@ -11,11 +11,11 @@ run pip to ensure all requirements are fulfilled
 ```bash
 pip install -r requirements.txt
 ```
-
-
+</br>
+</br>
 after that adjust the path of the data.csv
-
-
+</br>
+</br>
 now you can run the script:
 ```bash
 main.py -p PLAYERID
