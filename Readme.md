@@ -26,3 +26,6 @@ main.py -p PLAYERID
 This code is licensed under the [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/). 
 For more details, please take a look at the [LICENSE file](https://github.com/argv1/dota2-stats/blob/master/LICENSE).
 
+## Outlook
+Fetch the following information for each match:<p>
+Level,	Personal and Team K/D/A,	LH,	DN,	XPM,	GPM,	HD,	HH,	TD
