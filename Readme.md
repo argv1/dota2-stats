@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 after that adjust the path of the data.csv
 </br>
-
+</br>
 now you can run the script:
 
 ```bash
