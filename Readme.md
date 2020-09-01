@@ -2,7 +2,8 @@
 ======================
 
 ## Purpose
-For a small EDA I needed the data of all matches of different players. With the help of this little script I get the data from opendota.com
+For a small EDA I needed the data of all matches of different players.<p>
+With the help of this little script I get the information from opendota.com
 
 ## Usage
 run pip to ensure all requirements are fulfilled
