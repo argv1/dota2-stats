@@ -58,15 +58,15 @@ def get_matches(player_Id):
     for column in ["game_mode", "hero_id", "lobby_type"]:
         df[column] = df[column].astype("str")
 
-    with open(game_modes_f) as f:
+    with game_modes_f.open("r") as f:
         game_modes = dict(x.rstrip().split(None, 1) for x in f)
     df.game_mode.replace(game_modes, inplace=True)
 
-    with open(heroes_f) as f:
+    with heroes_f.open("r") as f:
         heroes = dict(x.rstrip().split(None, 1) for x in f)
     df.hero_id.replace(heroes, inplace=True)
 
-    with open(lobby_types_f) as f:
+    with lobby_types_f.open("r") as f:
         lobby_types = dict(x.rstrip().split(None, 1) for x in f)
     df.lobby_type.replace(lobby_types, inplace=True)
 
