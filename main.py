@@ -18,9 +18,11 @@ from   pathlib import Path
 import requests
 
 # Define path and filename
-base_path  = Path('H:\OneDrive\Programme\_current\dota-stats')  #adjust
-match_data = base_path / 'data.csv'            
-
+base_path     = Path('H:\OneDrive\Programme\_current\dota-stats')  #adjust
+match_data    = base_path / 'data.csv' 
+game_modes_f  = base_path / 'data\game_mode.txt'       
+heroes_f      = base_path / 'data\hero_lore.txt'
+lobby_types_f = base_path / 'data\lobby_type.txt'
 
 def get_matches(player_Id):
     '''
@@ -49,8 +51,25 @@ def get_matches(player_Id):
     skip_entry = False
     for entry in data:
         df = df.append(entry, ignore_index=True)
-        df.drop_duplicates(inplace=True)
     
+    df.drop_duplicates(inplace=True)
+
+    # decode lobbies, games and heroes
+    for column in ["game_mode", "hero_id", "lobby_type"]:
+        df[column] = df[column].astype("str")
+
+    with open(game_modes_f) as f:
+        game_modes = dict(x.rstrip().split(None, 1) for x in f)
+    df.game_mode.replace(game_modes, inplace=True)
+
+    with open(heroes_f) as f:
+        heroes = dict(x.rstrip().split(None, 1) for x in f)
+    df.hero_id.replace(heroes, inplace=True)
+
+    with open(lobby_types_f) as f:
+        lobby_types = dict(x.rstrip().split(None, 1) for x in f)
+    df.lobby_type.replace(lobby_types, inplace=True)
+
     # write new dataframe to csv
     df.to_csv(match_data, index=False)
 
