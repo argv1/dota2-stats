@@ -28,4 +28,4 @@ For more details, please take a look at the [LICENSE file](https://github.com/ar
 
 ## Outlook
 Fetch the following information for each match:<p>
-Level,	Personal and Team K/D/A,	LH,	DN,	XPM,	GPM,	HD,	HH,	TD
+Level,	Team K/D/A,	LH,	DN,	XPM,	GPM,	HD,	HH,	TD
