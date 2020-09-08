@@ -9,7 +9,7 @@ With the help of this little script I get the information from opendota.com
 run pip to ensure all requirements are fulfilled
  
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 </br>
 
