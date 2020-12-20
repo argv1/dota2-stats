@@ -12,6 +12,7 @@
 '''
 
 import argparse
+import numpy as np
 import os.path
 import pandas as pd
 from   pathlib import Path
@@ -75,6 +76,15 @@ def get_matches(player_Ids):
     with lobby_types_f.open("r") as f:
         lobby_types = dict(x.rstrip().split(None, 1) for x in f)
     df.lobby_type.replace(lobby_types, inplace=True)
+
+    # Drop heroes column
+    if(len(player_Ids) > 1): df.drop("heroes", axis=1,  inplace=True)
+
+    # Add additional informations
+    df['factions'] = np.where(np.greater_equal(df.player_slot,128), "Dire", "Radiant")
+    df['won'] = np.where(np.logical_or(np.logical_and(np.greater_equal(df.player_slot,128),np.equal(df.radiant_win,False)),np.logical_and(np.less(df.player_slot,128),np.equal(df.radiant_win,True))), "Won", "Lost")
+    df['KD'] = np.where(np.greater(df.deaths,0),df.kills / df.deaths, df.kills)
+    df['KDA'] = np.where(np.greater(df.deaths,0),(df.kills + df.assists) / df.deaths, df.kills + df.assists)
 
     return(df, match_data)
 
