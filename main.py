@@ -18,19 +18,17 @@ import pandas as pd
 from   pathlib import Path
 import requests
 
-# Define path and filename
-base_path     = Path('H:\OneDrive\Programme\_current\dota-stats')  #adjust
-game_modes_f  = base_path / 'data\game_mode.txt'       
-heroes_f      = base_path / 'data\hero_lore.txt'
-lobby_types_f = base_path / 'data\lobby_type.txt'
-
 def get_matches(player_Ids):
     '''
     Load already scrapped matches, 
     check for matches from the provided userid and 
     grab missing ones
     '''
-
+    # Define path and filename
+    base_path     = Path(__file__).parent.absolute()  #adjust
+    game_modes_f  = base_path / 'data\game_mode.txt'       
+    heroes_f      = base_path / 'data\hero_lore.txt'
+    lobby_types_f = base_path / 'data\lobby_type.txt'
     match_data = player_Ids[0]
 
     # 0 = including turbo, 1 = without
