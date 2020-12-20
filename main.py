@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 '''
-    small script to scrap all dota2 stats
-    (including turbo matches, which are usually not included)
-    (https://github.com/argv1/dota2-stats/)
+    small script to create a sankey diagram based on dota2 matches
+    (https://github.com/argv1/dota-sankey-diagram-generator/)
+    based on https://github.com/argv1/dota2-stats
 
-    Usage: main.py -p PLAYERID 
-    i.e. main.py -p 221666230
+    Usage: main.py -p PLAYERIDS -o ORDER
+    i.e. main.py -p 123456 987654 -o win, mode, hero, lobby, team
     opendota API documentation: https://docs.opendota.com/
 
     please feel free to improve
@@ -19,20 +19,26 @@ import requests
 
 # Define path and filename
 base_path     = Path('H:\OneDrive\Programme\_current\dota-stats')  #adjust
-match_data    = base_path / 'data.csv' 
 game_modes_f  = base_path / 'data\game_mode.txt'       
 heroes_f      = base_path / 'data\hero_lore.txt'
 lobby_types_f = base_path / 'data\lobby_type.txt'
 
-def get_matches(player_Id):
+def get_matches(player_Ids, order):
     '''
     Load already scrapped matches, 
     check for matches from the provided userid and 
     grab missing ones
     '''
 
+    match_data = player_Ids[0]
+
     # 0 = including turbo, 1 = without
-    url = f"https://api.opendota.com/api/players/{player_Id}/matches?significant=0" 
+    url = f"https://api.opendota.com/api/players/{player_Ids[0]}/matches?significant=0"
+    if(len(player_Ids) > 1):
+        for entry in range(1,len(player_Ids)):
+            url += f"&included_account_id={player_Ids[entry]}"
+            match_data += '-' + player_Ids[entry]
+    match_data = base_path / f'{match_data}.csv'
 
     # check if match_data already exists, else create it
     if not os.path.isfile(match_data):
@@ -48,11 +54,11 @@ def get_matches(player_Id):
     data = resp.json()
     
     # store every new match in the dataframe
-    skip_entry = False
+
     for entry in data:
         df = df.append(entry, ignore_index=True)
     
-    df.drop_duplicates(inplace=True)
+    df.drop_duplicates(subset='match_id',inplace=True)
 
     # decode lobbies, games and heroes
     for column in ["game_mode", "hero_id", "lobby_type"]:
@@ -76,12 +82,14 @@ def get_matches(player_Id):
 def main():
     # Initiate the parser
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--playerid', help='Enter a opendota user id', type=str, required=True)
+    parser.add_argument('-p','--player_Ids', nargs='+', help='Enter opendota user id(s)', required=True)
+    parser.add_argument('-o', '--order', help='Enter order of the sankey diagram', type=str)
     args = parser.parse_args()
-    player_Id = args.playerid
-    
+    player_Ids = args.player_Ids
+    order = args.order
+
     # get all matches
-    get_matches(player_Id)
+    get_matches(player_Ids, order)
 
 if __name__ == '__main__':
     main()
