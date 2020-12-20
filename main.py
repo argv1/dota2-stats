@@ -76,8 +76,7 @@ def get_matches(player_Ids, order):
         lobby_types = dict(x.rstrip().split(None, 1) for x in f)
     df.lobby_type.replace(lobby_types, inplace=True)
 
-    # write new dataframe to csv
-    df.to_csv(match_data, index=False)
+    return(df, match_data)
 
 def main():
     # Initiate the parser
@@ -89,7 +88,10 @@ def main():
     order = args.order
 
     # get all matches
-    get_matches(player_Ids, order)
+    df, match_data = get_matches(player_Ids, order)
+
+    # write new dataframe to csv
+    df.to_csv(match_data, index=False)
 
 if __name__ == '__main__':
     main()
