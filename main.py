@@ -3,11 +3,11 @@
     small script to scrap all dota2 stats
     (including turbo matches, which are usually not included)
     (https://github.com/argv1/dota2-stats/)
+    
+    Usage: main.py -p PLAYERIDS 
+    i.e. main.py -p 221666230 12345674
 
-    Usage: main.py -p PLAYERID 
-    i.e. main.py -p 221666230
     opendota API documentation: https://docs.opendota.com/
-
     please feel free to improve
 '''
 
@@ -23,7 +23,7 @@ game_modes_f  = base_path / 'data\game_mode.txt'
 heroes_f      = base_path / 'data\hero_lore.txt'
 lobby_types_f = base_path / 'data\lobby_type.txt'
 
-def get_matches(player_Ids, order):
+def get_matches(player_Ids):
     '''
     Load already scrapped matches, 
     check for matches from the provided userid and 
@@ -82,13 +82,11 @@ def main():
     # Initiate the parser
     parser = argparse.ArgumentParser()
     parser.add_argument('-p','--player_Ids', nargs='+', help='Enter opendota user id(s)', required=True)
-    parser.add_argument('-o', '--order', help='Enter order of the sankey diagram', type=str)
     args = parser.parse_args()
     player_Ids = args.player_Ids
-    order = args.order
 
     # get all matches
-    df, match_data = get_matches(player_Ids, order)
+    df, match_data = get_matches(player_Ids)
 
     # write new dataframe to csv
     df.to_csv(match_data, index=False)
