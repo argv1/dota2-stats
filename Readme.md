@@ -19,7 +19,7 @@ after that adjust the path of the data.csv
 now you can run the script:
 
 ```bash
-main.py -p PLAYERID
+main.py -p PLAYERIDS
 ```
 
 ## License
