@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 '''
-    small script to create a sankey diagram based on dota2 matches
-    (https://github.com/argv1/dota-sankey-diagram-generator/)
-    based on https://github.com/argv1/dota2-stats
+    small script to scrap all dota2 stats
+    (including turbo matches, which are usually not included)
+    (https://github.com/argv1/dota2-stats/)
 
-    Usage: main.py -p PLAYERIDS -o ORDER
-    i.e. main.py -p 123456 987654 -o win, mode, hero, lobby, team
+    Usage: main.py -p PLAYERID 
+    i.e. main.py -p 221666230
     opendota API documentation: https://docs.opendota.com/
 
     please feel free to improve
