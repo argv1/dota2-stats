@@ -29,23 +29,23 @@ def get_matches(player_Ids):
     game_modes_f  = base_path / 'data\game_mode.txt'       
     heroes_f      = base_path / 'data\hero_lore.txt'
     lobby_types_f = base_path / 'data\lobby_type.txt'
-    match_data = player_Ids[0]
+    match_f = player_Ids[0]
 
     # 0 = including turbo, 1 = without
     url = f"https://api.opendota.com/api/players/{player_Ids[0]}/matches?significant=0"
     if(len(player_Ids) > 1):
         for entry in range(1,len(player_Ids)):
             url += f"&included_account_id={player_Ids[entry]}"
-            match_data += '-' + player_Ids[entry]
-    match_data = base_path / f'{match_data}.csv'
+            match_f += '-' + player_Ids[entry]
+    match_f = base_path / f'{match_f}.csv'
 
     # check if match_data already exists, else create it
-    if not os.path.isfile(match_data):
+    if not os.path.isfile(match_f):
         df = pd.DataFrame(columns=["match_id", "player_slot", "radiant_win", "duration", "game_mode", "lobby_type", "hero_id", "start_time", "version", "kills", "deaths", "assists", "skill", "leaver_status", "party_size"])
-        df.to_csv(match_data, index=False)
+        df.to_csv(match_f, index=False)
 
     # load existing matches
-    df = pd.read_csv(match_data)
+    df = pd.read_csv(match_f)
     match_ids = pd.Series(df.match_id)
     
     # start request
@@ -53,10 +53,10 @@ def get_matches(player_Ids):
     data = resp.json()
     
     # store every new match in the dataframe
-
     for entry in data:
         df = df.append(entry, ignore_index=True)
     
+    # check for duplicate matches
     df.drop_duplicates(subset='match_id',inplace=True)
 
     # decode lobbies, games and heroes
@@ -84,7 +84,7 @@ def get_matches(player_Ids):
     df['KD'] = np.where(np.greater(df.deaths,0),df.kills / df.deaths, df.kills)
     df['KDA'] = np.where(np.greater(df.deaths,0),(df.kills + df.assists) / df.deaths, df.kills + df.assists)
 
-    return(df, match_data)
+    return(df, match_f)
 
 def main():
     # Initiate the parser
@@ -94,10 +94,10 @@ def main():
     player_Ids = args.player_Ids
 
     # get all matches
-    df, match_data = get_matches(player_Ids)
+    df, match_f = get_matches(player_Ids)
 
     # write new dataframe to csv
-    df.to_csv(match_data, index=False)
+    df.to_csv(match_f, index=False)
 
 if __name__ == '__main__':
     main()
